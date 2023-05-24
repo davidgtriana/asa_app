@@ -32,14 +32,24 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
         #endregion // Member Variables
 
         #region Unity Inspector Variables
-        [SerializeField]
+        //[SerializeField]
         [Tooltip("The prefab used to represent an anchored object.")]
         private GameObject anchoredObjectPrefab = null;
+        
+        //DANIEL - I added this so we can have a list of prefabs to choose from
+        [SerializeField]
+        [Tooltip("The prefab list used to represent an anchored object.")]
+        private List<GameObject> anchoredObjectPrefabList = null;
+        private int currentIndex = 0;
 
         [SerializeField]
         [Tooltip("SpatialAnchorManager instance to use for this demo. This is required.")]
         private SpatialAnchorManager cloudManager = null;
         #endregion // Unity Inspector Variables
+
+        //DANIEL - I created this variables to store the curren't obj pos & rotation
+        private Vector3 prevWorldPos;
+        private Quaternion prevWorldRot;
 
         /// <summary>
         /// Destroying the attached Behaviour will result in the game or Scene
@@ -102,7 +112,8 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
             {
                 feedbackBox.text = $"{nameof(SpatialAnchorManager.SpatialAnchorsAccountId)}, {nameof(SpatialAnchorManager.SpatialAnchorsAccountKey)} and {nameof(SpatialAnchorManager.SpatialAnchorsAccountDomain)} must be set on {nameof(SpatialAnchorManager)}";
             }
-
+            //DANIEL- sets the object prefab to the current index prefab
+            SetAnchoredObjectPrefab(currentIndex);
 
             if (AnchoredObjectPrefab == null)
             {
@@ -575,6 +586,28 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
                 // Use factory method to move
                 MoveAnchoredObject(spawnedObject, worldPos, worldRot, currentCloudAnchor);
             }
+
+            //DANIEL - stores the current obj spanwed pos
+            prevWorldPos = worldPos;
+            prevWorldRot = worldRot;
+        }
+
+        //DANIEL - changed the object on scene to the currently selected object
+        protected void ChangeObjectOnScreen()
+        {
+            if(spawnedObject == null) return;
+            Destroy(spawnedObject);
+            spawnedObject = null;
+            SpawnOrMoveCurrentAnchoredObject(prevWorldPos, prevWorldRot);
+        }
+
+        //DANIEL - add a new object on scene with the currently selected object
+        protected void AddNewObjectOnScreen()
+        {
+            if (spawnedObject == null)
+                return;
+            spawnedObject = null;
+            SpawnOrMoveCurrentAnchoredObject(prevWorldPos, prevWorldRot);
         }
 
         private void CloudManager_AnchorLocated(object sender, AnchorLocatedEventArgs args)
@@ -617,6 +650,15 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
 
         #region Public Properties
         /// <summary>
+        /// DANIEL - I added this to set the current prefab
+        /// </summary>
+        public void SetAnchoredObjectPrefab(int index)
+        {
+            currentIndex = index;
+            anchoredObjectPrefab = anchoredObjectPrefabList[currentIndex];
+        }
+
+        /// <summary>
         /// Gets the prefab used to represent an anchored object.
         /// </summary>
         public GameObject AnchoredObjectPrefab { get { return anchoredObjectPrefab; } }
@@ -624,7 +666,27 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
         /// <summary>
         /// Gets the <see cref="SpatialAnchorManager"/> instance used by this demo.
         /// </summary>
-        public SpatialAnchorManager CloudManager { get { return cloudManager; } }
+        public SpatialAnchorManager CloudManager { get { return cloudManager;
+            }
+        }
         #endregion // Public Properties
+
+
+        //DANIEL - button controls
+        public void SetCurrentObject(int index)
+        {
+            if (index >= anchoredObjectPrefabList.Count)
+                return;
+            SetAnchoredObjectPrefab(index);
+            ChangeObjectOnScreen();
+        }
+        public void SetNewCurrentObject()
+        {
+            if (currentIndex >= anchoredObjectPrefabList.Count)
+                return;
+            SetAnchoredObjectPrefab(currentIndex);
+            AddNewObjectOnScreen();
+        }
+
     }
 }
