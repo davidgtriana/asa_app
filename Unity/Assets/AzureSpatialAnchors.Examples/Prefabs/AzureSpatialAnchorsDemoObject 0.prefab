@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4763154345311751855}
   - component: {fileID: 550467370513004831}
   m_Layer: 0
-  m_Name: AzureSpatialAnchorsDemoObject
+  m_Name: AzureSpatialAnchorsDemoObject 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
