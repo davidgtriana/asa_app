@@ -472,7 +472,7 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
                     XRUXPickerForSharedAnchorDemo.Instance.transform.Rotate(Vector3.up, 180);
                     XRUXPickerForSharedAnchorDemo.Instance.GetDemoButtons()[0].gameObject.SetActive(true);
                     #else
-                    XRUXPickerForSharedAnchorDemo.Instance.GetDemoButtons()[0].transform.Find("Text").GetComponent<Text>().text = "Create & Share Anchor";
+                    XRUXPickerForSharedAnchorDemo.Instance.GetDemoButtons()[0].transform.Find("Text").GetComponent<Text>().text = "Create & Share";
                     #endif
                     XRUXPickerForSharedAnchorDemo.Instance.GetDemoInputField().gameObject.SetActive(false);
                     break;
