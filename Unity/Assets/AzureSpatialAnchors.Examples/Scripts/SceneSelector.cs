@@ -75,9 +75,9 @@ namespace Microsoft.Azure.SpatialAnchors.Unity.Examples
                 return;
             }
 
-            SceneIndex = 1;
+            SceneIndex = 0;
 
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(6);
         }
 
         void UpdateSceneText()
